@@ -39,6 +39,7 @@ dependencies {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Main-Class': 'in.vaidicjoshi.geektrust.backend.mymoney.MyMoneyApplication'
         //Change this to the main class of your program which will be executed
