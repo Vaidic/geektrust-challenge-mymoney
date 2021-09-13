@@ -6,6 +6,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class MyMoneyApplicationTests {
 
-  @Test
-  void contextLoads() {}
 }
