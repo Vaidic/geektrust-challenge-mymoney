@@ -1,9 +1,9 @@
 # Solution for [Geektrust Backend Challenge - MyMoney](https://www.geektrust.in/coding-problem/backend/mymoney)
 
-[![Build Status](https://app.travis-ci.com/Vaidic/geektrust-mymoney.svg?token=jhbBvohy7HabL35KRcVi&branch=main)](https://app.travis-ci.com/Vaidic/geektrust-mymoney)
-[![codecov](https://codecov.io/gh/Vaidic/geektrust-mymoney/branch/main/graph/badge.svg?token=DYGBG10X69)](https://codecov.io/gh/Vaidic/geektrust-mymoney)
+
+[![codecov](https://codecov.io/gh/Vaidic/geektrust-challenge-mymoney/branch/main/graph/badge.svg?token=JG7TPKWSQF)](https://codecov.io/gh/Vaidic/geektrust-challenge-mymoney)
 ![Java](https://img.shields.io/badge/OpenJDK-11-red)
-[![GitHub](https://img.shields.io/github/license/vaidic/effective-java-notes?style=plastic)](LICENSE)
+[![GitHub](https://img.shields.io/github/license/vaidic/geektrust-challenge-mymoney?style=plastic)](LICENSE)
 
 ## Problem Statement
 MyMoney platform lets investors consolidated portfolio value across **equity**, **debt**, and **gold**.
