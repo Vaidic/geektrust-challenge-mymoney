@@ -1,10 +1,9 @@
 package in.vaidicjoshi.geektrust.backend.mymoney;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.annotation.Order;
 
 import java.util.InputMismatchException;
 
@@ -13,8 +12,8 @@ import java.util.InputMismatchException;
  * @date 12/09/21
  */
 @SpringBootApplication
-@Order(-1)
-@Slf4j
+// @Order(-1) //todo: enable
+@Log4j2
 public class MyMoneyApplication implements CommandLineRunner {
 
   public static void main(String[] args) {
