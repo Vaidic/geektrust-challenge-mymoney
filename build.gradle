@@ -2,11 +2,13 @@ plugins {
 	id 'org.springframework.boot' version '2.5.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
-group = 'in.vaidicjoshi.geektrust.backend'
+group = 'in.vaidicjoshi.geektrust.backend.mymoney'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 configurations {
 	compileOnly {
@@ -19,12 +21,70 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	// This dependency is used by the application.
+	implementation 'com.google.guava:guava:29.0-jre'
+
+	// lombok dependency
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Spring dependencies
+	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	implementation group: 'org.springframework.shell', name: 'spring-shell-starter', version: '2.0.1.RELEASE'
+
+	// SLF4j
+	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.14.1'
+
 }
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'in.vaidicjoshi.geektrust.backend.mymoney.App'
+		//Change this to the main class of your program which will be executed
+	}
+	// To create a single jar with all dependencies.
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	} {
+		exclude "META-INF/*.SF"
+		exclude "META-INF/*.DSA"
+		exclude "META-INF/*.RSA"
+	}
+	archiveBaseName = 'geektrust' //Please do not change this final artifact name
+	archiveVersion = null         //Please do not change this final artifact version
+}
+
+bootJar {
+	archiveFileName = 'geektrust.jar'
+}
+
+
+configurations {
+	// to remove default logs created by spring on console
+	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	all*.exclude group: 'ch.qos.logback'
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it,
+					exclude: ['**/dto/**', '**/enums/**',
+							  '**/config/**', '**/constant/**'
+					])
+		}))
+	}
+}
+
 
 test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport // report is always generated after tests run
 }
