@@ -1,4 +1,4 @@
-name: Java CI with Gradle & CodeCov Coverage Report
+name: Build Status
 
 on:
   push:
