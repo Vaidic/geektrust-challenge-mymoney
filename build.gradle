@@ -1,8 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.4'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id 'jacoco'
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'jacoco'
 }
 
 group = 'in.vaidicjoshi.geektrust.backend.mymoney'
@@ -11,80 +11,81 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	// This dependency is used by the application.
-	implementation 'com.google.guava:guava:29.0-jre'
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:30.1.1-jre'
 
-	// lombok dependency
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    // lombok dependency
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-	// Spring dependencies
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation group: 'org.springframework.shell', name: 'spring-shell-starter', version: '2.0.1.RELEASE'
+    // Spring dependencies
+    implementation 'org.springframework.boot:spring-boot-starter:2.5.4'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.4'
+    implementation group: 'org.springframework.shell', name: 'spring-shell-starter', version: '2.0.1.RELEASE'
 
-	// SLF4j
-	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
+    // Log4j
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
 }
 
 jar {
-	manifest {
-		attributes 'Main-Class': 'in.vaidicjoshi.geektrust.backend.mymoney.MyMoneyApplication'
-		//Change this to the main class of your program which will be executed
-	}
-	// To create a single jar with all dependencies.
-	from {
-		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-	} {
-		exclude "META-INF/*.SF"
-		exclude "META-INF/*.DSA"
-		exclude "META-INF/*.RSA"
-		exclude "META-INF/**"
-	}
-	archiveBaseName = 'geektrust' //Please do not change this final artifact name
-	archiveVersion = null         //Please do not change this final artifact version
+    manifest {
+        attributes 'Main-Class': 'in.vaidicjoshi.geektrust.backend.mymoney.MyMoneyApplication'
+        //Change this to the main class of your program which will be executed
+    }
+    // To create a single jar with all dependencies.
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+        exclude "META-INF/**"
+    }
+    archiveBaseName = 'geektrust' //Please do not change this final artifact name
+    archiveVersion = null         //Please do not change this final artifact version
 }
 
 bootJar {
-	archiveFileName = 'geektrust.jar'
+    archiveFileName = 'geektrust.jar'
 }
 
 
 configurations {
-	// to remove default logs created by spring on console
-	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-	all*.exclude group: 'ch.qos.logback'
+    // to remove default logs created by spring on console
+    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    all*.exclude group: 'ch.qos.logback'
 }
 
 jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.enabled true
-		csv.enabled false
-		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-	}
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it,
-					exclude: ['**/dto/**', '**/enums/**',
-							  '**/config/**', '**/constant/**'
-					])
-		}))
-	}
+    dependsOn test
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ['**/dto/**', '**/enums/**',
+                              '**/config/**', '**/constant/**'
+                    ])
+        }))
+    }
 }
 
 
 test {
-	useJUnitPlatform()
-	finalizedBy jacocoTestReport // report is always generated after tests run
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
 }
