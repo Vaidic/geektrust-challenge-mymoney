@@ -5,7 +5,7 @@ import org.jline.utils.AttributedStyle;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
 
-import static in.vaidicjoshi.geektrust.backend.mymoney.controller.MyMoneyConstants.SHELL_PROMPT;
+import static in.vaidicjoshi.geektrust.backend.mymoney.constant.MyMoneyConstants.SHELL_PROMPT;
 
 /**
  * @author Vaidic Joshi

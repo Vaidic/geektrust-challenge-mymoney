@@ -1,7 +1,6 @@
 package in.vaidicjoshi.geektrust.backend.mymoney.controller;
 
 import in.vaidicjoshi.geektrust.backend.mymoney.service.MyMoneyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -15,7 +14,11 @@ import java.util.zip.DataFormatException;
  */
 @ShellComponent
 public class MyMoneyShellController {
-  @Autowired private MyMoneyService myMoneyService;
+  private final MyMoneyService myMoneyService;
+
+  public MyMoneyShellController(MyMoneyService myMoneyService) {
+    this.myMoneyService = myMoneyService;
+  }
 
   @ShellMethod("Receives the initial investment amounts for each fund viz equity, debt and gold.")
   public void allocate(List<Integer> allocations) throws DataFormatException {
