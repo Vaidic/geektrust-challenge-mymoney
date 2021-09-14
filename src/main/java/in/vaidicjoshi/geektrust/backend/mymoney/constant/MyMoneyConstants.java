@@ -1,4 +1,4 @@
-package in.vaidicjoshi.geektrust.backend.mymoney.controller;
+package in.vaidicjoshi.geektrust.backend.mymoney.constant;
 
 /**
  * @author Vaidic Joshi
