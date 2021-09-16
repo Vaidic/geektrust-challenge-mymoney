@@ -33,18 +33,18 @@ public class MyMoneyShellController {
 
   @ShellMethod(
       "Receives the monthly rate of change (growth or loss) for each fund viz equity, debt and gold. A negative value represents a loss.")
-  public void change(List<Double> rates, Month month) throws DataFormatException {
+  public void change(List<Double> rates, Month month) {
     myMoneyService.change(rates, month);
   }
 
   @ShellMethod("Prints the balance for each fund viz equity, debt and gold as on given Month.")
-  public String balance(Month month) throws CloneNotSupportedException {
+  public String balance(Month month) {
     return myMoneyService.balance(month);
   }
 
   @ShellMethod(
       "Print the rebalanced amount of each fund viz equity, debt and gold for the last 6 months. If at-least 6 months data is not available then print CANNOT_REBALANCE.")
-  public String rebalance() throws CloneNotSupportedException {
+  public String rebalance() {
     return myMoneyService.reBalance();
   }
 }

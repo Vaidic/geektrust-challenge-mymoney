@@ -11,9 +11,9 @@ import java.util.zip.DataFormatException;
 public interface MyMoneyService {
   void allocate(List<Integer> allocations) throws DataFormatException;
 
-  void sip(List<Integer> sips);
+  void sip(List<Integer> sips) throws DataFormatException;
 
-  void change(List<Double> rates, Month month);
+  void change(List<Double> rates, Month month) throws IllegalStateException;
 
   String balance(Month month);
 

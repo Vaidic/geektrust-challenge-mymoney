@@ -21,11 +21,10 @@ public class MyMoneyFundPortfolio implements Cloneable {
 
   @Override
   public MyMoneyFundPortfolio clone() {
-    try {
-      return (MyMoneyFundPortfolio) super.clone();
-    } catch (CloneNotSupportedException e) {
-      throw new AssertionError("Unable to copy the state of Funds");
-    }
+    return new MyMoneyFundPortfolio(
+        funds.stream()
+            .map(e -> new FundEntity(e.getAssetClass(), e.getAmount()))
+            .collect(Collectors.toList()));
   }
 
   @Override

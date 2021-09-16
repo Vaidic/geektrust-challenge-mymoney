@@ -6,4 +6,5 @@ package in.vaidicjoshi.geektrust.backend.mymoney.constant;
  */
 public class MyMoneyConstants {
   public static final String SHELL_PROMPT = "my-money-cli> ";
+  public static final String CANNOT_REBALANCE = "CANNOT_REBALANCE";
 }
