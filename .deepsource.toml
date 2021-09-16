@@ -6,3 +6,6 @@ enabled = true
 
   [analyzers.meta]
   runtime_version = "11"
+
+name = "test-coverage"
+enabled = true

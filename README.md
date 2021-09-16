@@ -2,7 +2,8 @@
 
 [![gradle-coverage](https://github.com/vaidic/geektrust-challenge-mymoney/actions/workflows/gradle-coverage.yml/badge.svg)](https://github.com/Vaidic/geektrust-challenge-mymoney/actions/workflows/gradle-coverage.yml)
 [![codecov](https://codecov.io/gh/Vaidic/geektrust-challenge-mymoney/branch/main/graph/badge.svg?token=JG7TPKWSQF)](https://codecov.io/gh/Vaidic/geektrust-challenge-mymoney)
-[![CodeFactor](https://www.codefactor.io/repository/github/vaidic/geektrust-challenge-mymoney/badge/main)](https://www.codefactor.io/repository/github/vaidic/geektrust-challenge-mymoney/overview/main) \
+[![CodeFactor](https://www.codefactor.io/repository/github/vaidic/geektrust-challenge-mymoney/badge/main)](https://www.codefactor.io/repository/github/vaidic/geektrust-challenge-mymoney/overview/main)
+[![DeepSource](https://deepsource.io/gh/Vaidic/geektrust-challenge-mymoney.svg/?label=active+issues&show_trend=true&token=Dfz5PcRjXpGyTVzeQEAaW5DI)](https://deepsource.io/gh/Vaidic/geektrust-challenge-mymoney/?ref=repository-badge) \
 [![License](https://img.shields.io/github/license/Vaidic/geektrust-challenge-mymoney?style=plastic)](LICENSE)
 ![Java](https://img.shields.io/badge/OpenJDK-11-red) \
 [![commits](https://badgen.net/github/commits/vaidic/geektrust-challenge-mymoney/main)](https://github.com/Vaidic/geektrust-challenge-mymoney/commits/main)
