@@ -8,7 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Month;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
@@ -49,6 +51,8 @@ class MyMoneyServiceTest {
     assertEquals(
         initialAllocation.stream().mapToDouble(Double::doubleValue).sum(),
         dataStub.initialAllocation.getTotalInvestment());
+    assertEquals(
+        100, dataStub.desiredWeights.values().stream().mapToDouble(Double::doubleValue).sum());
   }
 
   @Test
@@ -71,10 +75,73 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void sip() {}
+  void sipWithNullValues() {
+    assertThrows(
+        DataFormatException.class,
+        () -> myMoneyService.sip(null),
+        "Expected Sip method to throw Exception, but it didn't.");
+  }
 
   @Test
-  void change() {}
+  void sipWithInCorrectValues() {
+    assertThrows(
+        DataFormatException.class,
+        () -> myMoneyService.sip(Arrays.asList(10d, 20d, 30d, 40d)),
+        "Expected Sip method to throw Exception, but it didn't.");
+  }
+
+  @Test
+  void sipWithCorrectValues() throws DataFormatException {
+    List<Double> sipAmounts = Arrays.asList(10d, 20d, 30d);
+    myMoneyService.sip(sipAmounts);
+    assertEquals(sipAmounts.size(), dataStub.initialSip.getFunds().size());
+    assertEquals(
+        sipAmounts.stream().mapToDouble(Double::doubleValue).sum(),
+        dataStub.initialSip.getTotalInvestment());
+  }
+
+  @Test
+  void sipAlreadyAllocated() throws DataFormatException {
+    List<Double> sipAmounts = Arrays.asList(10d, 20d, 30d);
+    myMoneyService.sip(sipAmounts);
+    assertThrows(
+        IllegalStateException.class,
+        () -> myMoneyService.sip(sipAmounts),
+        "Expected Sip method to throw Exception, but it didn't.");
+  }
+
+  @Test
+  void changeWithNullValues() {
+    assertThrows(
+        InputMismatchException.class,
+        () -> myMoneyService.change(null, Month.JANUARY),
+        "Expected Change method to throw Exception, but it didn't.");
+  }
+
+  @Test
+  void changeWithInCorrectValues() {
+    assertThrows(
+        DataFormatException.class,
+        () -> myMoneyService.change(Arrays.asList(10d, 20d, 30d, 40d), Month.JANUARY),
+        "Expected Change method to throw Exception, but it didn't.");
+  }
+
+  @Test
+  void changeWithCorrectValues() throws DataFormatException {
+    List<Double> changeRate = Arrays.asList(10d, 20d, 30d);
+    myMoneyService.change(changeRate, Month.JANUARY);
+    assertEquals(changeRate.size(), dataStub.monthlyMarketChangeRate.get(Month.JANUARY).size());
+  }
+
+  @Test
+  void changeAlreadyAllocatedForMonth() throws DataFormatException {
+    List<Double> changeRate = Arrays.asList(10d, 20d, 30d);
+    myMoneyService.change(changeRate, Month.JANUARY);
+    assertThrows(
+        IllegalStateException.class,
+        () -> myMoneyService.change(changeRate, Month.JANUARY),
+        "Expected Change method to throw Exception, but it didn't.");
+  }
 
   @Test
   void balance() {}

@@ -33,7 +33,7 @@ public class MyMoneyShellController {
 
   @ShellMethod(
       "Receives the monthly rate of change (growth or loss) for each fund viz equity, debt and gold. A negative value represents a loss.")
-  public void change(List<Double> rates, Month month) {
+  public void change(List<Double> rates, Month month) throws DataFormatException {
     myMoneyService.change(rates, month);
   }
 

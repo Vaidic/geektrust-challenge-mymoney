@@ -130,10 +130,17 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    * @param month
    */
   @Override
-  public void change(List<Double> rates, Month month) throws IllegalStateException {
+  public void change(List<Double> rates, Month month)
+      throws IllegalStateException, DataFormatException {
     if (Objects.nonNull(dataStub.monthlyMarketChangeRate.getOrDefault(month, null))) {
       throw new IllegalStateException(
           "The Rate of Change for month " + month.name() + " is already registered");
+    }
+    if (Objects.isNull(rates) || Objects.isNull(month)) {
+      throw new InputMismatchException("One of the supplied parameter is null.");
+    }
+    if (rates.size() != dataStub.defaultAssetOrderForIO.size()) {
+      throw new DataFormatException("The input is not in the desired format");
     }
     Map<AssetClass, Double> change =
         Streams.zip(dataStub.defaultAssetOrderForIO.stream(), rates.stream(), Maps::immutableEntry)

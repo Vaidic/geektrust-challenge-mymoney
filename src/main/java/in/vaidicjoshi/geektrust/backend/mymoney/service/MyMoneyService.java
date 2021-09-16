@@ -13,7 +13,7 @@ public interface MyMoneyService {
 
   void sip(List<Double> sips) throws DataFormatException;
 
-  void change(List<Double> rates, Month month) throws IllegalStateException;
+  void change(List<Double> rates, Month month) throws IllegalStateException, DataFormatException;
 
   String balance(Month month);
 
