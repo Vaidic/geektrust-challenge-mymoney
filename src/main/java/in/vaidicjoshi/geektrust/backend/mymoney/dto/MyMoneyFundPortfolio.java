@@ -30,7 +30,7 @@ public class MyMoneyFundPortfolio implements Cloneable {
   @Override
   public String toString() {
     return funds.stream()
-        .map(entity -> entity.getAmount().toString())
+        .map(entity -> Integer.toString((int) Math.floor(entity.getAmount())))
         .collect(Collectors.joining(" "));
   }
 

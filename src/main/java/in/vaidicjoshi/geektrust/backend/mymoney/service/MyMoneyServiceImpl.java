@@ -232,13 +232,12 @@ public class MyMoneyServiceImpl implements MyMoneyService {
   private MyMoneyFundPortfolio applyMarketChange(
       MyMoneyFundPortfolio carryOverBalance, Map<AssetClass, Double> changeRate) {
     List<FundEntity> funds = carryOverBalance.getFunds();
-    funds.stream()
-        .forEach(
-            entity -> {
-              Double rate = changeRate.get(entity.getAssetClass());
-              Double updatedAmount = Math.floor(entity.getAmount() * (1 + rate / 100));
-              entity.setAmount(updatedAmount);
-            });
+    funds.forEach(
+        entity -> {
+          double rate = changeRate.get(entity.getAssetClass());
+          double updatedAmount = entity.getAmount() * (1 + rate / 100);
+          entity.setAmount(updatedAmount);
+        });
     return carryOverBalance;
   }
 
@@ -257,7 +256,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
           .forEach(
               index -> {
                 FundEntity fundEntity = funds.get(index);
-                Double sipAmount = initialSip.getFunds().get(index).getAmount();
+                double sipAmount = initialSip.getFunds().get(index).getAmount();
                 fundEntity.setAmount(fundEntity.getAmount() + sipAmount);
               });
     }
@@ -306,10 +305,10 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    */
   private MyMoneyFundPortfolio doReBalance(MyMoneyFundPortfolio currentFunds) {
     List<FundEntity> funds = currentFunds.getFunds();
-    Double totalInvestment = currentFunds.getTotalInvestment();
+    double totalInvestment = currentFunds.getTotalInvestment();
     funds.forEach(
         entity -> {
-          Double desiredWeight = dataStub.desiredWeights.get(entity.getAssetClass());
+          double desiredWeight = dataStub.desiredWeights.get(entity.getAssetClass());
           entity.setAmount(totalInvestment * desiredWeight / 100);
         });
     log.debug(
