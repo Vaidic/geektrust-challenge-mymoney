@@ -176,4 +176,12 @@ my-money-cli:> exit
       solutions.
     - Spring Boot comes with additional features like inherent dependency-injection that makes code more maintainable.
 
+2. The Exceptions thrown by service class are being propagated but not handled.
+    - This can be improved; it is not good user experience to display Exceptions, rather user-friendly error messages
+      should be used to handle these exceptions.
+
+3. Using a lazy-calculation scheme - i.e. we compute the balance only when user checks for balance or re-balacing is
+   required.
+    - This can be replaced with eager calculation to improve response time for user.
+    - Can also be done as a background batch job, without impacting performance.
 
