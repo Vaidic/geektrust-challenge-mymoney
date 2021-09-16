@@ -17,8 +17,8 @@ import java.util.*;
 @Setter
 @Scope("singleton")
 public class DataStub {
-  public TreeMap<Month, MyMoneyFundPortfolio> fundsData = new TreeMap<>();
-  public TreeMap<Month, Map<AssetClass, Double>> changes = new TreeMap<>();
+  public TreeMap<Month, MyMoneyFundPortfolio> monthlyBalance = new TreeMap<>();
+  public TreeMap<Month, Map<AssetClass, Double>> monthlyMarketChangeRate = new TreeMap<>();
   public MyMoneyFundPortfolio initialAllocation;
   public MyMoneyFundPortfolio initialSip;
   public Map<AssetClass, Integer> desiredWeights = new HashMap<>();

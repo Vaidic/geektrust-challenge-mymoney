@@ -131,14 +131,14 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    */
   @Override
   public void change(List<Double> rates, Month month) throws IllegalStateException {
-    if (Objects.nonNull(dataStub.changes.getOrDefault(month, null))) {
+    if (Objects.nonNull(dataStub.monthlyMarketChangeRate.getOrDefault(month, null))) {
       throw new IllegalStateException(
           "The Rate of Change for month " + month.name() + " is already registered");
     }
     Map<AssetClass, Double> change =
         Streams.zip(dataStub.defaultAssetOrderForIO.stream(), rates.stream(), Maps::immutableEntry)
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    dataStub.changes.put(month, change);
+    dataStub.monthlyMarketChangeRate.put(month, change);
   }
 
   /**
@@ -151,7 +151,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
   public String balance(Month month) {
     updateBalance();
     MyMoneyFundPortfolio fund =
-        Optional.ofNullable(dataStub.fundsData.get(month))
+        Optional.ofNullable(dataStub.monthlyBalance.get(month))
             .orElseThrow(
                 () ->
                     new IllegalStateException(
@@ -163,17 +163,22 @@ public class MyMoneyServiceImpl implements MyMoneyService {
 
   /** Calculates the total available balance upto the entered month. Calculates the */
   private void updateBalance() {
-    Map.Entry<Month, MyMoneyFundPortfolio> lastCalculatedBalance = dataStub.fundsData.lastEntry();
-    Map.Entry<Month, Map<AssetClass, Double>> lastKnownChange = dataStub.changes.lastEntry();
+    Map.Entry<Month, MyMoneyFundPortfolio> lastCalculatedBalance =
+        dataStub.monthlyBalance.lastEntry();
+    Map.Entry<Month, Map<AssetClass, Double>> lastKnownChange =
+        dataStub.monthlyMarketChangeRate.lastEntry();
     if (Objects.isNull(lastKnownChange)) {
       throw new IllegalStateException("Rate of Change is not defined");
     }
     if (Objects.isNull(lastCalculatedBalance)) {
       log.debug("Calculating balance for month of {}", lastCalculatedBalance);
       MyMoneyFundPortfolio myMoneyFund =
-          calculateBalance(dataStub.initialAllocation, null, dataStub.changes.get(Month.JANUARY));
-      dataStub.fundsData.put(Month.JANUARY, myMoneyFund);
-      lastCalculatedBalance = dataStub.fundsData.lastEntry();
+          calculateBalance(
+              dataStub.initialAllocation,
+              null,
+              dataStub.monthlyMarketChangeRate.get(Month.JANUARY));
+      dataStub.monthlyBalance.put(Month.JANUARY, myMoneyFund);
+      lastCalculatedBalance = dataStub.monthlyBalance.lastEntry();
     }
     if (lastCalculatedBalance.getKey() != lastKnownChange.getKey()) {
       Month startMonth = lastCalculatedBalance.getKey();
@@ -182,14 +187,16 @@ public class MyMoneyServiceImpl implements MyMoneyService {
         Month lastUpdatedMonth = Month.of(index);
         Month currentCalculationMonth = Month.of(index + 1);
         log.debug("Calculating balance for month of {}", currentCalculationMonth);
-        MyMoneyFundPortfolio carryOverBalance = dataStub.fundsData.get(lastUpdatedMonth).clone();
-        Map<AssetClass, Double> changeRate = dataStub.changes.get(currentCalculationMonth);
+        MyMoneyFundPortfolio carryOverBalance =
+            dataStub.monthlyBalance.get(lastUpdatedMonth).clone();
+        Map<AssetClass, Double> changeRate =
+            dataStub.monthlyMarketChangeRate.get(currentCalculationMonth);
         MyMoneyFundPortfolio availableBalance =
             calculateBalance(carryOverBalance, dataStub.initialSip, changeRate);
         if (shouldReBalance(currentCalculationMonth)) {
           availableBalance = doReBalance(availableBalance);
         }
-        dataStub.fundsData.putIfAbsent(currentCalculationMonth, availableBalance);
+        dataStub.monthlyBalance.putIfAbsent(currentCalculationMonth, availableBalance);
       }
     }
   }
@@ -265,9 +272,9 @@ public class MyMoneyServiceImpl implements MyMoneyService {
   @Override
   public String reBalance() {
     updateBalance();
-    Month lastUpdatedMonth = dataStub.fundsData.lastEntry().getKey();
+    Month lastUpdatedMonth = dataStub.monthlyBalance.lastEntry().getKey();
     Month lastRebalancedMonth = getLastReBalancedMonth(lastUpdatedMonth);
-    MyMoneyFundPortfolio balance = dataStub.fundsData.getOrDefault(lastRebalancedMonth, null);
+    MyMoneyFundPortfolio balance = dataStub.monthlyBalance.getOrDefault(lastRebalancedMonth, null);
     return Objects.nonNull(balance) ? balance.toString() : CANNOT_REBALANCE;
   }
 
