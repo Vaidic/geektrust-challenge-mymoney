@@ -3,7 +3,7 @@ package in.vaidicjoshi.geektrust.backend.mymoney.service;
 import com.google.common.base.Strings;
 import in.vaidicjoshi.geektrust.backend.mymoney.enums.SupportedCommand;
 import in.vaidicjoshi.geektrust.backend.mymoney.utils.MyMoneyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,10 +22,15 @@ import java.util.zip.DataFormatException;
  * @date 16/09/21
  */
 @Service
+@Log4j2
 public class MyMoneyDriver {
-  @Autowired private MyMoneyService myMoneyService;
+  private final MyMoneyService myMoneyService;
 
-  public void executeCommandsFromFile(String filename) {
+  public MyMoneyDriver(MyMoneyService myMoneyService) {
+    this.myMoneyService = myMoneyService;
+  }
+
+  public List<String> executeCommandsFromFile(String filename) throws IOException {
     try (Stream<String> lines = Files.lines(Paths.get(filename))) {
       List<String> outputs =
           lines
@@ -33,9 +38,11 @@ public class MyMoneyDriver {
               .map(this::processLineAsCommand)
               .collect(Collectors.toList());
       MyMoneyUtils.display(outputs);
+      return outputs;
 
     } catch (IOException e) {
-      System.out.println("Invalid File. Please check the path & name for input file provided.");
+      log.error("Invalid File. Please check the path & name for input file provided.");
+      throw new IOException("Invalid File. Please check the path & name for input file provided.");
     }
   }
 
