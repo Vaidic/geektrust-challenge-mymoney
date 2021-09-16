@@ -11,5 +11,5 @@ import lombok.NonNull;
 @Data
 public class FundEntity {
   @NonNull private AssetClass assetClass;
-  @NonNull private Integer amount;
+  @NonNull private Double amount;
 }

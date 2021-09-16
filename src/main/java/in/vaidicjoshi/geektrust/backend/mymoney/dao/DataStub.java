@@ -21,6 +21,6 @@ public class DataStub {
   public TreeMap<Month, Map<AssetClass, Double>> monthlyMarketChangeRate = new TreeMap<>();
   public MyMoneyFundPortfolio initialAllocation;
   public MyMoneyFundPortfolio initialSip;
-  public Map<AssetClass, Integer> desiredWeights = new HashMap<>();
+  public Map<AssetClass, Double> desiredWeights = new HashMap<>();
   public Set<AssetClass> defaultAssetOrderForIO = new LinkedHashSet<>();
 }

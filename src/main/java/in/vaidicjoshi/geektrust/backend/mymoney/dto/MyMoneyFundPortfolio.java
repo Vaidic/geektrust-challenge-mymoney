@@ -39,7 +39,7 @@ public class MyMoneyFundPortfolio implements Cloneable {
    *
    * @return total investment across all asset class
    */
-  public Integer getTotalInvestment() {
-    return funds.stream().mapToInt(FundEntity::getAmount).sum();
+  public double getTotalInvestment() {
+    return funds.stream().mapToDouble(FundEntity::getAmount).sum();
   }
 }

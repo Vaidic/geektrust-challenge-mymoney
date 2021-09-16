@@ -21,13 +21,13 @@ public class MyMoneyShellController {
   }
 
   @ShellMethod("Receives the initial investment amounts for each fund viz equity, debt and gold.")
-  public void allocate(List<Integer> allocations) throws DataFormatException {
+  public void allocate(List<Double> allocations) throws DataFormatException {
     myMoneyService.allocate(allocations);
   }
 
   @ShellMethod(
       "Receives the investment amount on a monthly basis for each fund viz equity, debt and gold.")
-  public void sip(List<Integer> sips) throws DataFormatException {
+  public void sip(List<Double> sips) throws DataFormatException {
     myMoneyService.sip(sips);
   }
 

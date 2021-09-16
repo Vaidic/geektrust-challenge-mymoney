@@ -9,9 +9,9 @@ import java.util.zip.DataFormatException;
  * @date 14/09/21
  */
 public interface MyMoneyService {
-  void allocate(List<Integer> allocations) throws DataFormatException;
+  void allocate(List<Double> allocations) throws DataFormatException;
 
-  void sip(List<Integer> sips) throws DataFormatException;
+  void sip(List<Double> sips) throws DataFormatException;
 
   void change(List<Double> rates, Month month) throws IllegalStateException;
 

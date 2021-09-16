@@ -38,7 +38,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    * @throws DataFormatException
    */
   @Override
-  public void allocate(List<Integer> allocations) throws DataFormatException {
+  public void allocate(List<Double> allocations) throws DataFormatException {
     if (Objects.nonNull(dataStub.initialAllocation)) {
       throw new IllegalStateException("The funds are already Allocated Once");
     }
@@ -50,7 +50,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
         dataStub.desiredWeights);
   }
 
-  private Map<AssetClass, Integer> calculateDesiredWeight() {
+  private Map<AssetClass, Double> calculateDesiredWeight() {
     if (Objects.isNull(dataStub.initialAllocation)) {
       throw new IllegalStateException("The funds are not yet Allocated");
     }
@@ -68,7 +68,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    * @return
    * @throws DataFormatException
    */
-  private MyMoneyFundPortfolio createMyMoneyFundsWithDefaultOrdering(List<Integer> allocations)
+  private MyMoneyFundPortfolio createMyMoneyFundsWithDefaultOrdering(List<Double> allocations)
       throws DataFormatException {
     return createMyMoneyFunds(dataStub.defaultAssetOrderForIO, allocations);
   }
@@ -83,7 +83,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    * @throws DataFormatException
    */
   private MyMoneyFundPortfolio createMyMoneyFunds(
-      Set<AssetClass> assetOrderForIO, List<Integer> allocations) throws DataFormatException {
+      Set<AssetClass> assetOrderForIO, List<Double> allocations) throws DataFormatException {
     validateInputs(assetOrderForIO, allocations);
     List<FundEntity> fundEntityList =
         Streams.zip(assetOrderForIO.stream(), allocations.stream(), FundEntity::new)
@@ -98,7 +98,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    * @param allocations
    * @throws DataFormatException
    */
-  private void validateInputs(Set<AssetClass> assetOrderForIO, List<Integer> allocations)
+  private void validateInputs(Set<AssetClass> assetOrderForIO, List<Double> allocations)
       throws DataFormatException {
     if (Objects.isNull(allocations) || allocations.size() != assetOrderForIO.size()) {
       throw new DataFormatException("The input is not in the desired format");
@@ -113,7 +113,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    * @throws DataFormatException
    */
   @Override
-  public void sip(List<Integer> sips) throws DataFormatException {
+  public void sip(List<Double> sips) throws DataFormatException {
     // Since sip always starts from Feb, we disallow entering multiple sips
     if (Objects.nonNull(dataStub.initialSip)) {
       throw new IllegalStateException("The SIP is already registered once");
@@ -236,7 +236,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
         .forEach(
             entity -> {
               Double rate = changeRate.get(entity.getAssetClass());
-              Integer updatedAmount = (int) Math.floor(entity.getAmount() * (1 + rate / 100));
+              Double updatedAmount = Math.floor(entity.getAmount() * (1 + rate / 100));
               entity.setAmount(updatedAmount);
             });
     return carryOverBalance;
@@ -257,7 +257,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
           .forEach(
               index -> {
                 FundEntity fundEntity = funds.get(index);
-                Integer sipAmount = initialSip.getFunds().get(index).getAmount();
+                Double sipAmount = initialSip.getFunds().get(index).getAmount();
                 fundEntity.setAmount(fundEntity.getAmount() + sipAmount);
               });
     }
@@ -306,10 +306,10 @@ public class MyMoneyServiceImpl implements MyMoneyService {
    */
   private MyMoneyFundPortfolio doReBalance(MyMoneyFundPortfolio currentFunds) {
     List<FundEntity> funds = currentFunds.getFunds();
-    Integer totalInvestment = currentFunds.getTotalInvestment();
+    Double totalInvestment = currentFunds.getTotalInvestment();
     funds.forEach(
         entity -> {
-          Integer desiredWeight = dataStub.desiredWeights.get(entity.getAssetClass());
+          Double desiredWeight = dataStub.desiredWeights.get(entity.getAssetClass());
           entity.setAmount(totalInvestment * desiredWeight / 100);
         });
     log.debug(
