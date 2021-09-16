@@ -236,7 +236,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
         entity -> {
           double rate = changeRate.get(entity.getAssetClass());
           double updatedAmount = entity.getAmount() * (1 + rate / 100);
-          entity.setAmount(updatedAmount);
+          entity.setAmount(Math.floor(updatedAmount));
         });
     return carryOverBalance;
   }
@@ -257,7 +257,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
               index -> {
                 FundEntity fundEntity = funds.get(index);
                 double sipAmount = initialSip.getFunds().get(index).getAmount();
-                fundEntity.setAmount(fundEntity.getAmount() + sipAmount);
+                fundEntity.setAmount(Math.floor(fundEntity.getAmount() + sipAmount));
               });
     }
     return carryOverBalance;
@@ -309,7 +309,7 @@ public class MyMoneyServiceImpl implements MyMoneyService {
     funds.forEach(
         entity -> {
           double desiredWeight = dataStub.desiredWeights.get(entity.getAssetClass());
-          entity.setAmount(totalInvestment * desiredWeight / 100);
+          entity.setAmount(Math.floor(totalInvestment * desiredWeight / 100));
         });
     log.debug(
         "Re-balanced the current total balance of {} to desired weights of {} to {}",
