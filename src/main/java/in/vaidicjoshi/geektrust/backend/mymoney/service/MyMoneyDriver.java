@@ -15,6 +15,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.DataFormatException;
 
 /**
  * @author Vaidic Joshi
@@ -74,6 +75,8 @@ public class MyMoneyDriver {
         case REBALANCE:
           output = myMoneyService.reBalance();
           break;
+        default:
+          throw new DataFormatException("Invalid Command " + command + " supplied");
       }
     } catch (Exception e) {
       System.out.println(
