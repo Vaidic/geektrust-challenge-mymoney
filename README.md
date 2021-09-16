@@ -5,8 +5,8 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/vaidic/geektrust-challenge-mymoney/badge/main)](https://www.codefactor.io/repository/github/vaidic/geektrust-challenge-mymoney/overview/main) \
 [![License](https://img.shields.io/github/license/Vaidic/geektrust-challenge-mymoney?style=plastic)](LICENSE)
 ![Java](https://img.shields.io/badge/OpenJDK-11-red) \
-[![commits](https://badgen.net/github/commits/Vaidic/geektrust-challenge-mymoney/main)](https://github.com/Vaidic/geektrust-challenge-mymoney/commits/main)
-[![last-commit](https://badgen.net/github/last-commit/Vaidic/geektrust-challenge-mymoney/main)](https://github.com/Vaidic/geektrust-challenge-mymoney/commits/main)
+[![commits](https://badgen.net/github/commits/vaidic/geektrust-challenge-mymoney/main)](https://github.com/Vaidic/geektrust-challenge-mymoney/commits/main)
+[![last-commit](https://badgen.net/github/last-commit/vaidic/geektrust-challenge-mymoney/main)](https://github.com/Vaidic/geektrust-challenge-mymoney/commits/main)
 [![releases](https://badgen.net/github/release/Vaidic/geektrust-challenge-mymoney)](https://github.com/Vaidic/geektrust-challenge-mymoney/releases)
 
 ## Problem Statement
