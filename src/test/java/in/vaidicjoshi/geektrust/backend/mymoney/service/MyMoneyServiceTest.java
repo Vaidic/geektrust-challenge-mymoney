@@ -8,13 +8,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Month;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
+import static in.vaidicjoshi.geektrust.backend.mymoney.constant.MyMoneyConstants.CANNOT_REBALANCE;
 import static in.vaidicjoshi.geektrust.backend.mymoney.enums.AssetClass.*;
+import static java.time.Month.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -36,7 +37,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void allocateNull() {
+  void testAllocateNull() {
     assertThrows(
         DataFormatException.class,
         () -> myMoneyService.allocate(null),
@@ -44,7 +45,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void allocateCorrectValues() throws DataFormatException {
+  void testAllocateCorrectValues() throws DataFormatException {
     List<Double> initialAllocation = Arrays.asList(10d, 20d, 30d);
     myMoneyService.allocate(initialAllocation);
     assertEquals(initialAllocation.size(), dataStub.initialAllocation.getFunds().size());
@@ -56,7 +57,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void allocateInCorrectValues() {
+  void testAllocateInCorrectValues() {
     assertThrows(
         DataFormatException.class,
         () -> myMoneyService.allocate(Arrays.asList(10d, 20d, 30d, 40d)),
@@ -64,7 +65,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void allocateAlreadyAllocated() throws DataFormatException {
+  void testAllocateAlreadyAllocated() throws DataFormatException {
     List<Double> initialAllocation = Arrays.asList(10d, 20d, 30d);
     myMoneyService.allocate(initialAllocation);
 
@@ -75,7 +76,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void sipWithNullValues() {
+  void testSipWithNullValues() {
     assertThrows(
         DataFormatException.class,
         () -> myMoneyService.sip(null),
@@ -83,7 +84,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void sipWithInCorrectValues() {
+  void testSipWithInCorrectValues() {
     assertThrows(
         DataFormatException.class,
         () -> myMoneyService.sip(Arrays.asList(10d, 20d, 30d, 40d)),
@@ -91,7 +92,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void sipWithCorrectValues() throws DataFormatException {
+  void testSipWithCorrectValues() throws DataFormatException {
     List<Double> sipAmounts = Arrays.asList(10d, 20d, 30d);
     myMoneyService.sip(sipAmounts);
     assertEquals(sipAmounts.size(), dataStub.initialSip.getFunds().size());
@@ -101,7 +102,7 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void sipAlreadyAllocated() throws DataFormatException {
+  void testSipAlreadyAllocated() throws DataFormatException {
     List<Double> sipAmounts = Arrays.asList(10d, 20d, 30d);
     myMoneyService.sip(sipAmounts);
     assertThrows(
@@ -111,44 +112,82 @@ class MyMoneyServiceTest {
   }
 
   @Test
-  void changeWithNullValues() {
+  void testChangeWithNullValues() {
     assertThrows(
         InputMismatchException.class,
-        () -> myMoneyService.change(null, Month.JANUARY),
+        () -> myMoneyService.change(null, JANUARY),
         "Expected Change method to throw Exception, but it didn't.");
   }
 
   @Test
-  void changeWithInCorrectValues() {
+  void testChangeWithInCorrectValues() {
     assertThrows(
         DataFormatException.class,
-        () -> myMoneyService.change(Arrays.asList(10d, 20d, 30d, 40d), Month.JANUARY),
+        () -> myMoneyService.change(Arrays.asList(10d, 20d, 30d, 40d), JANUARY),
         "Expected Change method to throw Exception, but it didn't.");
   }
 
   @Test
-  void changeWithCorrectValues() throws DataFormatException {
+  void testChangeWithCorrectValues() throws DataFormatException {
     List<Double> changeRate = Arrays.asList(10d, 20d, 30d);
-    myMoneyService.change(changeRate, Month.JANUARY);
-    assertEquals(changeRate.size(), dataStub.monthlyMarketChangeRate.get(Month.JANUARY).size());
+    myMoneyService.change(changeRate, JANUARY);
+    assertEquals(changeRate.size(), dataStub.monthlyMarketChangeRate.get(JANUARY).size());
   }
 
   @Test
-  void changeAlreadyAllocatedForMonth() throws DataFormatException {
+  void testChangeAlreadyAllocatedForMonth() throws DataFormatException {
     List<Double> changeRate = Arrays.asList(10d, 20d, 30d);
-    myMoneyService.change(changeRate, Month.JANUARY);
+    myMoneyService.change(changeRate, JANUARY);
     assertThrows(
         IllegalStateException.class,
-        () -> myMoneyService.change(changeRate, Month.JANUARY),
+        () -> myMoneyService.change(changeRate, JANUARY),
         "Expected Change method to throw Exception, but it didn't.");
   }
 
   @Test
-  void balance() {}
+  void testBalanceInSufficientData() throws DataFormatException {
+    myMoneyService.allocate(Arrays.asList(6000d, 3000d, 1000d));
+    myMoneyService.sip(Arrays.asList(2000d, 1000d, 500d));
+    assertThrows(
+        IllegalStateException.class,
+        () -> myMoneyService.balance(JANUARY),
+        "Expected Change method to throw Exception, but it didn't.");
+  }
 
   @Test
-  void reBalance() {}
+  void testBalance() throws DataFormatException {
+    initializePortfolio();
+    assertEquals("10593 7897 2272", myMoneyService.balance(MARCH));
+  }
+
+  private void initializePortfolio() throws DataFormatException {
+    myMoneyService.allocate(Arrays.asList(6000d, 3000d, 1000d));
+    myMoneyService.sip(Arrays.asList(2000d, 1000d, 500d));
+    myMoneyService.change(Arrays.asList(4d, 10d, 2d), JANUARY);
+    myMoneyService.change(Arrays.asList(-10.00d, 40.00d, 0.00d), FEBRUARY);
+    myMoneyService.change(Arrays.asList(12.50d, 12.50d, 12.50d), MARCH);
+    myMoneyService.change(Arrays.asList(8.00d, -3.00d, 7.00d), APRIL);
+    myMoneyService.change(Arrays.asList(13.00d, 21.00d, 10.50d), MAY);
+    myMoneyService.change(Arrays.asList(10.00d, 8.00d, -5.00d), JUNE);
+  }
 
   @Test
-  void getSupportedAssetClass() {}
+  void testReBalance() throws DataFormatException {
+    initializePortfolio();
+    assertEquals("23619 11809 3936", myMoneyService.reBalance());
+  }
+
+  @Test
+  void testReBalanceWithInsufficientData() throws DataFormatException {
+    myMoneyService.allocate(Arrays.asList(6000d, 3000d, 1000d));
+    myMoneyService.sip(Arrays.asList(2000d, 1000d, 500d));
+    myMoneyService.change(Arrays.asList(4d, 10d, 2d), JANUARY);
+    String result = myMoneyService.reBalance();
+    assertEquals(CANNOT_REBALANCE, result);
+  }
+
+  @Test
+  void testGetSupportedAssetClass() {
+    assertEquals(3, myMoneyService.getSupportedAssetClass());
+  }
 }
