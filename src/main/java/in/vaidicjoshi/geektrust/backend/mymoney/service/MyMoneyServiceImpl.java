@@ -318,4 +318,9 @@ public class MyMoneyServiceImpl implements MyMoneyService {
         currentFunds);
     return currentFunds;
   }
+
+  @Override
+  public int getSupportedAssetClass() {
+    return dataStub.defaultAssetOrderForIO.size();
+  }
 }

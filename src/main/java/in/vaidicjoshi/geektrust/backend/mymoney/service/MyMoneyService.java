@@ -18,4 +18,6 @@ public interface MyMoneyService {
   String balance(Month month);
 
   String reBalance();
+
+  int getSupportedAssetClass();
 }
