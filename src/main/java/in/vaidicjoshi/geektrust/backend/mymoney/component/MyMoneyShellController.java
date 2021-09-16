@@ -1,4 +1,4 @@
-package in.vaidicjoshi.geektrust.backend.mymoney.controller;
+package in.vaidicjoshi.geektrust.backend.mymoney.component;
 
 import in.vaidicjoshi.geektrust.backend.mymoney.service.MyMoneyService;
 import org.springframework.shell.standard.ShellComponent;

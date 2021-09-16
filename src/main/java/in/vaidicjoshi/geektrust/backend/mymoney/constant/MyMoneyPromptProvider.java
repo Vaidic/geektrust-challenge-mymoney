@@ -1,4 +1,4 @@
-package in.vaidicjoshi.geektrust.backend.mymoney.controller;
+package in.vaidicjoshi.geektrust.backend.mymoney.constant;
 
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;

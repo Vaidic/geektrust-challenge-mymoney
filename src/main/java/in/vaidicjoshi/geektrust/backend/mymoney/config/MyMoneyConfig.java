@@ -1,4 +1,4 @@
-package in.vaidicjoshi.geektrust.backend.mymoney;
+package in.vaidicjoshi.geektrust.backend.mymoney.config;
 
 import in.vaidicjoshi.geektrust.backend.mymoney.dao.DataStub;
 import org.springframework.context.annotation.Bean;
