@@ -1,9 +1,11 @@
 package in.vaidicjoshi.geektrust.backend.mymoney;
 
+import in.vaidicjoshi.geektrust.backend.mymoney.service.MyMoneyDriver;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.annotation.Order;
 
 import java.util.InputMismatchException;
 
@@ -12,9 +14,15 @@ import java.util.InputMismatchException;
  * @date 12/09/21
  */
 @SpringBootApplication
-// @Order(-1) //todo: enable
+@Order(-1) // todo: enable
 @Log4j2
 public class MyMoneyApplication implements CommandLineRunner {
+
+  final MyMoneyDriver myMoneyDriver;
+
+  public MyMoneyApplication(MyMoneyDriver myMoneyDriver) {
+    this.myMoneyDriver = myMoneyDriver;
+  }
 
   public static void main(String[] args) {
     SpringApplication.run(MyMoneyApplication.class, args);
@@ -37,6 +45,7 @@ public class MyMoneyApplication implements CommandLineRunner {
       return;
     }
     log.info("Switching to BATCH-PROCESSING Mode");
-    // todo: process file - executeCommandsFromFile(input);
+    myMoneyDriver.executeCommandsFromFile(input);
+    System.exit(0);
   }
 }
