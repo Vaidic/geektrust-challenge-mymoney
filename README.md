@@ -48,7 +48,7 @@ The supported commands are: \
 
 ## Running the project
 
-1. Download the [latest geektrust.jar]()
+1. Download the [latest geektrust.jar](https://github.com/Vaidic/geektrust-challenge-mymoney/releases)
 2. Execute the following command replacing _<path-to-inputfile>_ with the path for input file
 
 ```shell
